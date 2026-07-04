@@ -79,10 +79,14 @@ export const weddingData = {
     music: "/music/wedding-music.mp3",
     ganpatiImage: "/images/ganpati.png",
     weddingCard: "/images/wedding-card.jpg",
-    groomPhoto: "", // TODO: Add groom photo path, e.g. "/images/groom.jpg"
-    bridePhoto: "", // TODO: Add bride photo path, e.g. "/images/bride.jpg"
+    groomPhoto: "/images/Couple_photo1.jpeg",
+    bridePhoto: "/images/Couple_photo2.jpeg",
     galleryImages: [
-      "/images/wedding-card.jpg",
+      "/images/Couple_photo1.jpeg",
+      "/images/Couple_photo2.jpeg",
+      "/images/Couple_photo3.jpeg",
+      "/images/Couple_photo4.jpeg",
+      "/images/Couple_photo5.jpeg",
     ],
   },
 
