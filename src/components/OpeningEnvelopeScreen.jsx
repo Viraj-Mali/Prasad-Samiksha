@@ -3,35 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { weddingData } from '../data/index.js';
 
 /* ═══════════════════════════════════════════════════════
-   MAGICAL BACKGROUND ELEMENTS
+   BACKGROUND & PARTICLES
 ═══════════════════════════════════════════════════════ */
-const MandalaWatermark = () => (
-  <svg viewBox="0 0 400 400" className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.03]">
-    <g stroke="#C9A84C" strokeWidth="1" fill="none">
-      <circle cx="200" cy="200" r="180" strokeDasharray="4 6"/>
-      <circle cx="200" cy="200" r="140"/>
-      <circle cx="200" cy="200" r="100" strokeDasharray="2 4"/>
-      {[0,45,90,135,180,225,270,315].map((a)=>(
-        <path key={a} d="M200 60 Q240 130 200 200 Q160 130 200 60" transform={`rotate(${a} 200 200)`} fill="rgba(201,168,76,0.1)"/>
-      ))}
-      {[22.5, 67.5, 112.5, 157.5, 202.5, 247.5, 292.5, 337.5].map((a)=>(
-        <path key={a} d="M200 100 Q220 150 200 200 Q180 150 200 100" transform={`rotate(${a} 200 200)`} fill="none"/>
-      ))}
-    </g>
-  </svg>
-);
-
 const MagicalParticles = ({ isMobile }) => {
   const particles = [
-    { e: '🌸', l: '5%', dur: 12, del: 0, sz: 20 },
-    { e: '🦋', l: '15%', dur: 16, del: 3, sz: 18, flutter: true },
-    { e: '🍃', l: '25%', dur: 14, del: 1, sz: 15 },
-    { e: '✨', l: '35%', dur: 9, del: 5, sz: 12 },
-    { e: '🌸', l: '45%', dur: 18, del: 2, sz: 22 },
-    { e: '🦋', l: '60%', dur: 15, del: 6, sz: 16, flutter: true },
-    { e: '🌿', l: '75%', dur: 17, del: 4, sz: 14 },
-    { e: '🌸', l: '85%', dur: 13, del: 1.5, sz: 19 },
-    { e: '✨', l: '95%', dur: 11, del: 7, sz: 14 },
+    { e: '🌸', l: '10%', dur: 14, del: 0, sz: 16 },
+    { e: '🦋', l: '20%', dur: 18, del: 4, sz: 14, flutter: true },
+    { e: '🍃', l: '35%', dur: 16, del: 2, sz: 14 },
+    { e: '✨', l: '50%', dur: 10, del: 6, sz: 10 },
+    { e: '🌸', l: '70%', dur: 15, del: 1, sz: 18 },
+    { e: '🦋', l: '85%', dur: 17, del: 5, sz: 15, flutter: true },
+    { e: '🌿', l: '90%', dur: 13, del: 3, sz: 14 },
   ];
   const activeParticles = isMobile ? particles.filter((_,i) => i%2===0) : particles;
   
@@ -40,8 +22,8 @@ const MagicalParticles = ({ isMobile }) => {
       {activeParticles.map((p, i) => (
         <span key={i} className={p.flutter ? 'anim-flutter' : ''} style={{
           position: 'absolute', left: p.l, bottom: '-30px',
-          fontSize: p.sz, userSelect: 'none',
-          animation: `floatUp ${p.dur}s ${p.del}s linear infinite, slowDrift ${p.dur*0.6}s ease-in-out infinite`,
+          fontSize: p.sz, userSelect: 'none', opacity: 0.6,
+          animation: `floatUp ${p.dur}s ${p.del}s linear infinite, slowDrift ${p.dur*0.7}s ease-in-out infinite`,
         }}>
           {p.e}
         </span>
@@ -51,43 +33,43 @@ const MagicalParticles = ({ isMobile }) => {
 };
 
 /* ═══════════════════════════════════════════════════════
-   ENVELOPE ARTWORK (Gold Foil)
+   ENVELOPE ARTWORK (White/Gold Floral Line Art)
 ═══════════════════════════════════════════════════════ */
-const EnvelopeFoilBody = () => (
-  <svg viewBox="0 0 400 260" fill="none" className="absolute inset-0 w-full h-full pointer-events-none z-10">
-    {/* Inner decorative border */}
-    <rect x="12" y="12" width="376" height="236" rx="8" stroke="rgba(201,168,76,0.25)" strokeWidth="1" strokeDasharray="4 4"/>
-    {/* V Fold lines - perspective depth */}
-    <path d="M2 2 L200 140 L398 2" stroke="rgba(201,168,76,0.3)" strokeWidth="1.5"/>
-    <path d="M2 258 L200 140 L398 258" stroke="rgba(201,168,76,0.15)" strokeWidth="1"/>
+const FlapLineArt = () => (
+  <svg viewBox="0 0 400 160" fill="none" className="absolute inset-0 w-full h-full pointer-events-none">
+    {/* Inner decorative dashed border along the V */}
+    <path d="M10 5 L200 145 L390 5" stroke="rgba(201,168,76,0.5)" strokeWidth="1" strokeDasharray="4 4"/>
     
-    {/* Floral corners - Bottom Left */}
-    <g transform="translate(16, 244) scale(0.8)">
-      <path d="M0 0 Q20 -10 30 -30 Q10 -20 0 0" fill="rgba(201,168,76,0.4)"/>
-      <path d="M0 0 Q30 5 40 -15 Q15 0 0 0" fill="rgba(201,168,76,0.3)"/>
-      <circle cx="15" cy="-12" r="3" fill="rgba(201,168,76,0.6)"/>
-    </g>
-    {/* Floral corners - Bottom Right */}
-    <g transform="translate(384, 244) scale(-0.8, 0.8)">
-      <path d="M0 0 Q20 -10 30 -30 Q10 -20 0 0" fill="rgba(201,168,76,0.4)"/>
-      <path d="M0 0 Q30 5 40 -15 Q15 0 0 0" fill="rgba(201,168,76,0.3)"/>
-      <circle cx="15" cy="-12" r="3" fill="rgba(201,168,76,0.6)"/>
-    </g>
+    {/* Symmetrical floral swooshes on flap */}
+    <path d="M100 40 Q150 100 200 135" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M300 40 Q250 100 200 135" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" strokeLinecap="round"/>
+    
+    <circle cx="100" cy="40" r="3" fill="rgba(255,255,255,0.8)"/>
+    <circle cx="300" cy="40" r="3" fill="rgba(255,255,255,0.8)"/>
+    <path d="M80 20 Q100 20 100 40 Q80 40 80 20" fill="rgba(255,255,255,0.4)"/>
+    <path d="M320 20 Q300 20 300 40 Q320 40 320 20" fill="rgba(255,255,255,0.4)"/>
   </svg>
 );
 
-const EnvelopeFoilFlap = () => (
-  <svg viewBox="0 0 400 135" fill="none" className="absolute inset-0 w-full h-full pointer-events-none">
-    {/* Gold trim edge */}
-    <path d="M2 2 L200 130 L398 2" stroke="rgba(201,168,76,0.5)" strokeWidth="2"/>
-    <path d="M12 2 L200 120 L388 2" stroke="rgba(201,168,76,0.2)" strokeWidth="1" strokeDasharray="3 3"/>
+const PocketLineArt = () => (
+  <svg viewBox="0 0 400 280" fill="none" className="absolute inset-0 w-full h-full pointer-events-none">
+    {/* Outer dashed border */}
+    <rect x="10" y="10" width="380" height="260" rx="8" stroke="rgba(201,168,76,0.3)" strokeWidth="1" strokeDasharray="3 3"/>
     
-    {/* Center mandala drop on flap */}
-    <g transform="translate(200, 70)">
-      <circle cx="0" cy="0" r="18" stroke="rgba(201,168,76,0.3)" strokeWidth="1" fill="none"/>
-      <circle cx="0" cy="0" r="12" stroke="rgba(201,168,76,0.2)" strokeWidth="1" strokeDasharray="2 2" fill="none"/>
-      <path d="M0 -8 L3 0 L0 8 L-3 0 Z" fill="rgba(201,168,76,0.4)"/>
-      <path d="M-8 0 L0 3 L8 0 L0 -3 Z" fill="rgba(201,168,76,0.4)"/>
+    {/* Symmetrical corner florals */}
+    <g transform="translate(20, 260) scale(1, -1)">
+      <path d="M0 0 Q40 0 60 40" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" fill="none"/>
+      <path d="M0 0 Q0 40 40 60" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" fill="none"/>
+      <circle cx="60" cy="40" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="40" cy="60" r="3" fill="rgba(255,255,255,0.8)"/>
+      <path d="M10 10 Q25 25 40 20 Q25 10 10 10" fill="rgba(255,255,255,0.4)"/>
+    </g>
+    <g transform="translate(380, 260) scale(-1, -1)">
+      <path d="M0 0 Q40 0 60 40" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" fill="none"/>
+      <path d="M0 0 Q0 40 40 60" stroke="rgba(255,255,255,0.7)" strokeWidth="1.5" fill="none"/>
+      <circle cx="60" cy="40" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="40" cy="60" r="3" fill="rgba(255,255,255,0.8)"/>
+      <path d="M10 10 Q25 25 40 20 Q25 10 10 10" fill="rgba(255,255,255,0.4)"/>
     </g>
   </svg>
 );
@@ -110,9 +92,9 @@ const OpeningEnvelopeScreen = ({ onEnter }) => {
     if (phase !== 'idle') return;
     setPhase('opening');
     // Flap opens, seal breaks/fades (1s)
-    setTimeout(() => setPhase('revealing'), 1000);
+    setTimeout(() => setPhase('revealing'), 900);
     // Card slides out, then transitions (2.5s)
-    setTimeout(() => { setPhase('done'); onEnter(); }, 2800);
+    setTimeout(() => { setPhase('done'); onEnter(); }, 3200);
   };
 
   const isEnvelopeOpen = phase === 'opening' || phase === 'revealing';
@@ -124,106 +106,133 @@ const OpeningEnvelopeScreen = ({ onEnter }) => {
           key="magical-splash"
           className="fixed inset-0 z-50 flex flex-col items-center justify-center px-4 overflow-hidden"
           style={{
-            background: 'linear-gradient(155deg, #7A9E7A 0%, #648964 40%, #4D704D 100%)',
+            background: 'linear-gradient(135deg, #8CAF8C 0%, #6E946E 100%)', // Soft elegant sage
           }}
-          exit={{ opacity: 0, scale: 1.08, filter: 'blur(8px)' }}
-          transition={{ duration: 1, ease: 'easeInOut' }}
+          exit={{ opacity: 0, filter: 'blur(8px)' }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
         >
-          {/* Background Textures */}
-          <MandalaWatermark />
+          {/* Particles */}
           <MagicalParticles isMobile={isMobile} />
           
           {/* Top Title: You Are Invited */}
           <motion.div
-            initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 1.2, ease: "easeOut" }}
-            className="text-center mb-8 relative z-10"
+            className="text-center mb-10 relative z-10"
           >
-            <p style={{ fontFamily: 'var(--font-lora)', color: 'rgba(255,255,255,0.7)',
-              fontSize: 11, letterSpacing: '0.45em', textTransform: 'uppercase', marginBottom: 12 }}>
+            <p style={{ fontFamily: 'var(--font-lora)', color: 'rgba(255,255,255,0.85)',
+              fontSize: 10, letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: 12 }}>
               {weddingData.wedding.blessing}
             </p>
             <h1 style={{ fontFamily: 'var(--font-garamond)', color: '#FFFFFF',
-              fontSize: 'clamp(2.8rem, 9vw, 4.5rem)', fontWeight: 400,
-              letterSpacing: '0.04em', margin: 0, lineHeight: 1.1,
-              textShadow: '0 4px 16px rgba(0,0,0,0.15)' }}>
+              fontSize: 'clamp(2.5rem, 8vw, 3.8rem)', fontWeight: 400,
+              letterSpacing: '0.02em', margin: 0, lineHeight: 1.1,
+              textShadow: '0 2px 12px rgba(0,0,0,0.1)' }}>
               You Are Invited
             </h1>
-            <div style={{ width: 140, height: 1.5, margin: '16px auto 0',
-              background: 'linear-gradient(90deg, transparent, rgba(232,201,122,0.85), transparent)' }} />
           </motion.div>
 
-          {/* 3D ENVELOPE */}
+          {/* PHYSICAL ENVELOPE STRUCTURE */}
           <motion.div
-            initial={{ opacity: 0, y: 60, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.5, duration: 1.2, ease: [0.2, 0.8, 0.2, 1] }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
             className="relative z-20"
-            style={{ width: 'min(400px, 94vw)', aspectRatio: '400/260' }}
+            style={{ width: 'min(400px, 92vw)', aspectRatio: '400/280' }}
           >
-            {/* Main Envelope Body */}
-            <div className="absolute inset-0 env-3d-body">
-              <EnvelopeFoilBody />
-            </div>
+            {/* 1. Envelope Back Inside (Darker shade) */}
+            <div className="absolute inset-0 rounded-xl" style={{ 
+              background: '#D9D0BC', 
+              boxShadow: 'inset 0 4px 12px rgba(0,0,0,0.1)'
+            }}/>
 
-            {/* Invitation Card (Slides out from behind flap, inside body) */}
-            <div className="absolute inset-0 flex items-center justify-center overflow-hidden" style={{ zIndex: 20 }}>
+            {/* 2. Invitation Card (Slides out from inside) */}
+            <div className="absolute inset-0 flex items-end justify-center overflow-hidden rounded-xl">
               <AnimatePresence>
                 {phase === 'revealing' && (
                   <motion.div
-                    initial={{ y: 80, opacity: 0 }} 
-                    animate={{ y: -120, opacity: 1 }} // Slides significantly up
-                    transition={{ duration: 1.2, ease: [0.4, 0, 0.1, 1] }}
+                    initial={{ y: 20, opacity: 0 }} 
+                    animate={{ y: -160, opacity: 1 }} // Slides completely out
+                    transition={{ duration: 1.5, ease: [0.4, 0, 0.1, 1] }}
                     style={{
                       background: 'linear-gradient(150deg, #FDF9F2, #FAF7F0)',
-                      border: '1.5px solid rgba(201,168,76,0.5)',
-                      borderRadius: 16, padding: '24px', width: '85%', height: '180%',
-                      boxShadow: '0 20px 50px rgba(0,0,0,0.2)',
+                      border: '1px solid rgba(201,168,76,0.3)',
+                      borderRadius: 12, padding: '24px', width: '88%', height: '180%',
+                      boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
                       textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center'
                     }}
                   >
-                    <span style={{ fontSize: 24, color: 'rgba(201,168,76,0.6)', marginBottom: 8 }}>🌸</span>
+                    <span style={{ fontSize: 24, color: 'rgba(201,168,76,0.6)', marginBottom: 12, marginTop: 12 }}>🌸</span>
                     <p style={{ fontFamily: 'var(--font-garamond)', fontSize: 28, color: 'var(--color-choco)', fontWeight: 500, lineHeight: 1.2 }}>
-                      {weddingData.couple.groomName} <br/><span style={{ color: 'var(--color-gold)', fontSize: 20 }}>&amp;</span><br/> {weddingData.couple.brideName}
+                      {weddingData.couple.groomName} <br/><span style={{ color: 'var(--color-gold)', fontSize: 20, fontStyle: 'italic' }}>&amp;</span><br/> {weddingData.couple.brideName}
                     </p>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Envelope Flap (Hinges open) */}
-            <motion.div
-              className="absolute top-0 left-0 right-0 env-3d-flap"
-              style={{ height: '52%', clipPath: 'polygon(0 0, 100% 0, 50% 96%)' }}
-              animate={isEnvelopeOpen ? { rotateX: -180, opacity: 0.9, zIndex: 10 } : { rotateX: 0, opacity: 1, zIndex: 30 }}
-              transition={{ duration: 1.2, ease: [0.4, 0, 0.1, 1] }}
-            >
-              <EnvelopeFoilFlap />
-            </motion.div>
+            {/* 3. Envelope Pocket (Front bottom part) */}
+            <div className="absolute inset-0 pointer-events-none rounded-xl" style={{ 
+              background: 'linear-gradient(160deg, #F2ECD9 0%, #E8DFCA 100%)',
+              clipPath: 'polygon(0 0, 0% 100%, 100% 100%, 100% 0, 50% 60%)', // Creates the pocket shape
+              boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
+              zIndex: 10
+            }}>
+              <PocketLineArt />
+            </div>
 
-            {/* Giant Central Wax Seal (Breaks/Fades on open) */}
-            <AnimatePresence>
-              {phase === 'idle' && (
-                <motion.div
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 1.4, opacity: 0, filter: 'blur(6px)' }}
-                  transition={{ duration: 0.7, ease: "easeOut" }}
-                  className="absolute"
-                  style={{ top: '52%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 40 }}
-                >
-                  <button onClick={handleClick} className="env-seal-3d seal-breathe" style={{ width: 110, height: 110 }}>
-                    <span style={{
-                      fontFamily: 'var(--font-garamond)', color: '#FFF',
-                      fontSize: 28, fontWeight: 500, letterSpacing: '0.05em',
-                      textShadow: '0 2px 8px rgba(80,40,0,0.8)'
-                    }}>
-                      P <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.7)' }}>✦</span> S
-                    </span>
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* 4. Top Flap (Hinges upward) */}
+            <motion.div
+              className="absolute top-0 left-0 w-full rounded-t-xl"
+              style={{ 
+                height: '65%', 
+                background: 'linear-gradient(160deg, #FDF9F2 0%, #F0E6CE 100%)',
+                clipPath: 'polygon(0 0, 100% 0, 50% 100%)', // Triangle flap
+                transformOrigin: 'top center',
+                zIndex: 20,
+                boxShadow: '0 4px 15px rgba(0,0,0,0.08)' // Soft drop shadow below flap
+              }}
+              animate={isEnvelopeOpen ? { rotateX: -180, opacity: 0 } : { rotateX: 0, opacity: 1 }}
+              transition={{ duration: 1, ease: [0.4, 0, 0.1, 1] }}
+            >
+              <FlapLineArt />
+              
+              {/* Wax Seal (Attached to the tip of the flap) */}
+              <AnimatePresence>
+                {phase === 'idle' && (
+                  <motion.div
+                    exit={{ opacity: 0, scale: 1.2, filter: 'blur(4px)' }}
+                    transition={{ duration: 0.5 }}
+                    style={{ position: 'absolute', bottom: -45, left: '50%', transform: 'translateX(-50%)' }}
+                  >
+                    <button 
+                      onClick={handleClick}
+                      style={{ 
+                        width: 90, height: 90, borderRadius: '50%', cursor: 'pointer', border: 'none',
+                        background: 'radial-gradient(circle at 35% 35%, #F5E6B8 0%, #C9A84C 40%, #8A6420 100%)',
+                        boxShadow: '0 6px 16px rgba(100,60,10,0.3), inset 0 2px 6px rgba(255,255,255,0.4)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        animation: 'sealGlowPulse 4s ease-in-out infinite' // Gentle breathing
+                      }}
+                    >
+                      <span style={{
+                        fontFamily: 'var(--font-garamond)', color: '#FFF',
+                        fontSize: 26, fontWeight: 400, letterSpacing: '0.02em',
+                        textShadow: '0 2px 6px rgba(80,40,0,0.6)'
+                      }}>
+                        P <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.8)' }}>&amp;</span> S
+                      </span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+            
+            {/* Outer soft shadow for the whole envelope to lift it off the background */}
+            <div className="absolute inset-0 rounded-xl pointer-events-none" style={{
+               boxShadow: '0 20px 50px rgba(0,0,0,0.15), 0 4px 15px rgba(0,0,0,0.05)',
+               zIndex: -1
+            }}/>
           </motion.div>
 
           {/* Tap Instruction */}
@@ -233,7 +242,7 @@ const OpeningEnvelopeScreen = ({ onEnter }) => {
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 transition={{ delay: 1.5, duration: 1 }}
                 style={{ fontFamily: 'var(--font-lora)', fontStyle: 'italic',
-                  color: 'rgba(255,255,255,0.65)', fontSize: 15, marginTop: 28, zIndex: 10 }}
+                  color: 'rgba(255,255,255,0.7)', fontSize: 14, marginTop: 40, zIndex: 10 }}
               >
                 Tap the seal to open our invitation
               </motion.p>
@@ -242,9 +251,9 @@ const OpeningEnvelopeScreen = ({ onEnter }) => {
               <motion.p
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 style={{ fontFamily: 'var(--font-lora)', fontStyle: 'italic',
-                  color: 'rgba(201,168,76,0.9)', fontSize: 16, marginTop: 28, zIndex: 10 }}
+                  color: 'rgba(255,255,255,0.9)', fontSize: 15, marginTop: 40, zIndex: 10 }}
               >
-                Opening with love... ✨
+                Opening... ✨
               </motion.p>
             )}
           </AnimatePresence>
