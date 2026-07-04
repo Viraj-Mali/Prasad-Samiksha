@@ -109,7 +109,7 @@ export const weddingData = {
 
   share: {
     whatsappText: "You are cordially invited to the wedding of Dr. Prasad & Samiksha! 💍\n09 July 2026 | Vasant Lawns, Sangamner\nYour presence and blessings are most welcome.\n",
-    websiteUrl: "https://wedding-invitation-card.vercel.app/",
+    websiteUrl: "https://prasad-samiksha-wedding.vercel.app/",
   },
 
   seo: {
