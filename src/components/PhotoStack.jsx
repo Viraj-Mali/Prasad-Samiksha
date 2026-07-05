@@ -38,14 +38,14 @@ const PhotoStack = () => {
 
   // Auto-rotate logic (changed every 3s as requested)
   useEffect(() => {
-    if (prefersReducedMotion || isPaused || lightboxImg) return;
+    if (prefersReducedMotion || lightboxImg) return;
     
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % displayImages.length);
     }, 3000); // 3s auto rotation
     
     return () => clearInterval(interval);
-  }, [isPaused, lightboxImg, prefersReducedMotion, displayImages.length]);
+  }, [lightboxImg, prefersReducedMotion, displayImages.length]);
 
   const handleCardClick = (index, diff) => {
     if (diff === 0) {
@@ -175,10 +175,6 @@ const PhotoStack = () => {
           perspective: '1000px',
           marginTop: '20px'
         }}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onTouchStart={() => setIsPaused(true)}
-        onTouchEnd={() => setIsPaused(false)}
       >
         {/* Cinematic Idle Motion Wrapper */}
         <motion.div 
