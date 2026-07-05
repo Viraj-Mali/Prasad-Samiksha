@@ -99,6 +99,17 @@ const Footer = () => {
           style={{ fontSize: 20, marginTop: 32, color: 'rgba(232,201,122,0.3)' }}>
           🌸 🌿 🌸
         </motion.div>
+
+        {/* Developer Credit */}
+        <p style={{ 
+          fontFamily: 'var(--font-lora)', 
+          color: 'rgba(232,201,122,0.4)',
+          fontSize: '0.8rem', 
+          letterSpacing: '0.05em',
+          marginTop: 40 
+        }}>
+          Developed by Viraj
+        </p>
       </motion.div>
     </footer>
   );
