@@ -28,13 +28,13 @@ const PhotoStack = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Auto-rotate logic
+  // Auto-rotate logic (slowed down as requested: 5.5s to 7s interval)
   useEffect(() => {
     if (prefersReducedMotion || isPaused || lightboxImg) return;
     
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % displayImages.length);
-    }, 8500); // 8.5s auto rotation
+    }, 6000); // 6s auto rotation
     
     return () => clearInterval(interval);
   }, [isPaused, lightboxImg, prefersReducedMotion, displayImages.length]);
@@ -61,23 +61,24 @@ const PhotoStack = () => {
     const total = displayImages.length;
     const diff = (index - activeIndex + total) % total;
 
-    const baseRotations = [0, -3, 4, -2, 2];
-    const rotation = baseRotations[index];
+    // A subtle direction modifier based on index so it doesn't look robotic
+    const dir = index % 2 === 0 ? 1 : -1;
     
-    const baseInitial = { opacity: 0, scale: 0.75, y: 300, rotate: rotation };
+    // Starting position (entering from below)
+    const baseInitial = { opacity: 0, scale: 0.78, y: 180, rotate: dir * 2 };
 
     if (prefersReducedMotion) {
       const staticDiff = index;
-      if (staticDiff === 0) return { zIndex: 20, animate: { opacity: 1, scale: 1, y: 0, rotate: rotation }, initial: baseInitial };
-      if (staticDiff === 1) return { zIndex: 15, animate: { opacity: 0.9, scale: 0.95, y: 40, rotate: -4 }, initial: baseInitial };
-      if (staticDiff === 2) return { zIndex: 10, animate: { opacity: 0.8, scale: 0.9, y: 80, rotate: 6 }, initial: baseInitial };
-      return { zIndex: 0, animate: { opacity: 0, scale: 0.8, y: 120, rotate: 0 }, initial: baseInitial };
+      if (staticDiff === 0) return { zIndex: 30, animate: { opacity: 1, scale: 1, y: 0, rotate: dir }, initial: baseInitial };
+      if (staticDiff === 1) return { zIndex: 20, animate: { opacity: 0.8, scale: 0.92, y: 55, rotate: dir * 3 }, initial: baseInitial };
+      if (staticDiff === 2) return { zIndex: 10, animate: { opacity: 0.55, scale: 0.84, y: 105, rotate: dir * -3 }, initial: baseInitial };
+      return { zIndex: 5, animate: { opacity: 0, scale: 0.78, y: 180, rotate: 0 }, initial: baseInitial };
     }
 
     if (diff === 0) {
       return {
         zIndex: 30,
-        animate: { opacity: 1, scale: 1, y: 0, rotate: rotation },
+        animate: { opacity: 1, scale: 1, y: 0, rotate: dir },
         initial: baseInitial
       };
     }
@@ -85,7 +86,7 @@ const PhotoStack = () => {
     if (diff === 1) {
       return {
         zIndex: 20,
-        animate: { opacity: 1, scale: 0.94, y: 45, rotate: rotation - 2 },
+        animate: { opacity: 0.8, scale: 0.92, y: 55, rotate: dir * 3 },
         initial: baseInitial
       };
     }
@@ -93,22 +94,22 @@ const PhotoStack = () => {
     if (diff === 2) {
       return {
         zIndex: 10,
-        animate: { opacity: 0.9, scale: 0.88, y: 90, rotate: rotation + 3 },
+        animate: { opacity: 0.55, scale: 0.84, y: 105, rotate: dir * -3 },
         initial: baseInitial
       };
     }
     
     if (diff === total - 1) {
       return {
-        zIndex: 40, 
-        animate: { opacity: 0, scale: 1.05, y: -120, rotate: rotation - 5 },
+        zIndex: 40, // Stays above front while exiting
+        animate: { opacity: 0, scale: 1.04, y: -90, rotate: dir * -4 },
         initial: baseInitial
       };
     }
 
     return {
       zIndex: 5,
-      animate: { opacity: 0, scale: 0.82, y: 140, rotate: rotation },
+      animate: { opacity: 0, scale: 0.78, y: 180, rotate: 0 },
       initial: baseInitial
     };
   };
@@ -118,7 +119,7 @@ const PhotoStack = () => {
       className="pt-24 px-4 overflow-hidden relative" 
       style={{ 
         background: 'linear-gradient(180deg, #FDF9F2 0%, #E8EFE8 100%)',
-        paddingBottom: '160px'
+        paddingBottom: '200px' // Increased padding so trailing cards and floating buttons never overlap
       }}
     >
       <div style={{
@@ -155,73 +156,81 @@ const PhotoStack = () => {
       </motion.div>
 
       <div 
-        className="relative mx-auto flex justify-center items-center" 
+        className="relative mx-auto flex justify-center items-start" 
         style={{ 
           width: '100%', 
-          maxWidth: '400px', 
+          maxWidth: '440px', // Wider bounding box on desktop
           height: '65vh', 
           minHeight: '500px',
           maxHeight: '650px',
           zIndex: 10,
-          perspective: '1000px'
+          perspective: '1000px',
+          marginTop: '20px'
         }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
         onTouchEnd={() => setIsPaused(false)}
       >
-        {displayImages.map((src, index) => {
-          const diff = (index - activeIndex + displayImages.length) % displayImages.length;
-          const { animate, initial, zIndex } = getCardStyleAndAnimation(index);
-          const isFront = diff === 0;
+        {/* Cinematic Idle Motion Wrapper */}
+        <motion.div 
+          animate={{ y: [0, -8, 0] }} 
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', position: 'relative' }}
+        >
+          {displayImages.map((src, index) => {
+            const diff = (index - activeIndex + displayImages.length) % displayImages.length;
+            const { animate, initial, zIndex } = getCardStyleAndAnimation(index);
+            const isFront = diff === 0;
 
-          return (
-            <motion.div
-              key={index}
-              className="absolute will-change-transform"
-              style={{
-                width: '82vw',
-                maxWidth: '360px',
-                aspectRatio: '3.6/5',
-                background: '#fff',
-                padding: '10px 10px 32px 10px',
-                borderRadius: 6,
-                boxShadow: isFront 
-                  ? '0 25px 50px rgba(44,24,16,0.15)' 
-                  : '0 10px 30px rgba(44,24,16,0.08)',
-                cursor: 'pointer',
-                zIndex,
-              }}
-              initial={initial}
-              whileInView={animate}
-              viewport={{ once: true, margin: '-50px' }}
-              animate={hasEntered ? animate : undefined}
-              transition={{
-                duration: 2.4,
-                ease: [0.22, 1, 0.36, 1],
-                delay: !hasEntered ? index * 0.45 : 0 // Stagger on initial load only
-              }}
-              onClick={() => handleCardClick(index, diff)}
-            >
-              <div 
-                style={{ 
-                  width: '100%', height: '100%', 
-                  background: 'linear-gradient(135deg, #FDF9F2, #EBF0EB)', 
-                  overflow: 'hidden', 
-                  borderRadius: 4,
-                  position: 'relative'
+            return (
+              <motion.div
+                key={index}
+                className="absolute will-change-transform"
+                style={{
+                  width: '82vw',
+                  maxWidth: '380px',
+                  aspectRatio: '3.6/5',
+                  background: '#fff',
+                  padding: '10px 10px 32px 10px',
+                  borderRadius: 6,
+                  boxShadow: isFront 
+                    ? '0 25px 50px rgba(44,24,16,0.15)' 
+                    : '0 10px 30px rgba(44,24,16,0.08)',
+                  cursor: 'pointer',
+                  zIndex,
                 }}
+                initial={initial}
+                whileInView={animate}
+                viewport={{ once: true, margin: '-50px' }}
+                animate={hasEntered ? animate : undefined}
+                transition={{
+                  duration: 2.6, // Slow 2.6s transition as requested
+                  ease: [0.22, 1, 0.36, 1], // Exactly matching reference easing
+                  delay: !hasEntered ? index * 0.45 : 0 
+                }}
+                onClick={() => handleCardClick(index, diff)}
               >
-                <img 
-                  src={src} 
-                  alt={`Memory ${index + 1}`} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} 
-                  loading={isFront ? "eager" : "lazy"}
-                />
-              </div>
-            </motion.div>
-          );
-        })}
+                <div 
+                  style={{ 
+                    width: '100%', height: '100%', 
+                    background: 'linear-gradient(135deg, #FDF9F2, #EBF0EB)', 
+                    overflow: 'hidden', 
+                    borderRadius: 4,
+                    position: 'relative'
+                  }}
+                >
+                  <img 
+                    src={src} 
+                    alt={`Memory ${index + 1}`} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} 
+                    loading={isFront ? "eager" : "lazy"}
+                  />
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
 
       <AnimatePresence>
